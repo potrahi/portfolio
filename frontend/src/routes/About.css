@@ -1,0 +1,20 @@
+section {
+  text-align: center;
+}
+
+section > img {
+  margin: 0 auto;
+  display: block;
+}
+
+section > p {
+  text-align: left;
+  width: 100%;
+}
+
+img {
+  border-radius: 50%;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
