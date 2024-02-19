@@ -1,9 +1,11 @@
-# Use an official Node runtime as a parent image
-FROM node:latest
+FROM node:16 AS build
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN npm install
+COPY . .
 RUN npm run build
-RUN npm install -g serve
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
-CMD ["serve", "-s", "dist", "-l", "80"]
+CMD ["nginx", "-g", "daemon off;"]
