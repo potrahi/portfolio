@@ -10,6 +10,7 @@ export default function Root() {
         <Link to="/about">About</Link>
         <Link to="/blog">Blog</Link>
         <Link to="/projects">Projects</Link>
+        <Link to="/contact">Contact</Link>
       </nav>
       <main>
         <Outlet />
