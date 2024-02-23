@@ -2,17 +2,24 @@ version: "3.8"
 services:
   frontend:
     build:
-      context: ./frontend
+      context: frontend
       dockerfile: Dockerfile
+    networks:
+      - portfolio
     restart: unless-stopped
     ports:
       - "80:80"
   backend:
     build:
-      context: ./backend
+      context: backend
       dockerfile: Dockerfile
     restart: unless-stopped
+    networks:
+      - portfolio
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
+
+networks:
+  portfolio:
