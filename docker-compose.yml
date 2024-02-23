@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_REACT_APP_BACKEND_URL: "193.165.29.194:3001"
-    networks:
-      - portfolio
     restart: unless-stopped
     ports:
       - "80:80"
@@ -16,8 +14,6 @@ services:
       context: backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    networks:
-      - portfolio
     ports:
       - "3001:3001"
     environment:
