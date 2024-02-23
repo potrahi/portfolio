@@ -4,13 +4,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        VITE_REACT_APP_BACKEND_URL: backend:3001
     restart: unless-stopped
     ports:
       - "80:80"
-    environment:
-      - VITE_REACT_APP_BACKEND_URL=backend:3001
   backend:
     build:
       context: ./backend

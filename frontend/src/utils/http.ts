@@ -8,7 +8,7 @@ export async function sendMessage(
   message: MessageType
 ): Promise<boolean | CustomError> {
   const res = await fetch(
-    `http://${import.meta.env.VITE_REACT_APP_BACKEND_URL}/message/send`,
+    `http://${import.meta.env.VITE_REACT_APP_BACKEND_URL || "localhost:3000"}/message/send`,
     {
       method: "POST",
       body: JSON.stringify(message),
