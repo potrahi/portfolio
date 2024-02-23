@@ -10,7 +10,7 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
         const message = Object.fromEntries(formData) as MessageType;
         onSubmit(message);
     }
-
+    
     return (
         <form id="contact-form" onSubmit={handleSubmit}>
             <span>

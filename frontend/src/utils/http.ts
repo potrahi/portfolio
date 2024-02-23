@@ -7,7 +7,9 @@ export const queryClient = new QueryClient();
 export async function sendMessage(
   message: MessageType
 ): Promise<boolean | CustomError> {
-  const res = await fetch("http://localhost:3001/message/send", {
+  const backendUrl =
+    import.meta.env.VITE_REACT_APP_BACKEND_URL || "localhost:3001";
+  const res = await fetch(`http://${backendUrl}/message/send`, {
     method: "POST",
     body: JSON.stringify(message),
     headers: {
