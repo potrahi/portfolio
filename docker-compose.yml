@@ -5,7 +5,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_REACT_APP_BACKEND_URL: "http://backend:3001"
+        VITE_REACT_APP_BACKEND_URL: "backend:3001"
     restart: unless-stopped
     ports:
       - "80:80"
