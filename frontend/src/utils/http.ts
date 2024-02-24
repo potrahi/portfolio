@@ -7,25 +7,30 @@ export const queryClient = new QueryClient();
 export async function sendMessage(
   message: MessageType
 ): Promise<boolean | CustomError> {
-  const res = await fetch(
-    `http://${import.meta.env.VITE_REACT_APP_BACKEND_URL}/message/send`,
-    {
+  try {
+    const baseUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+    const url = baseUrl
+      ? `http://${baseUrl}/api/message/send`
+      : "/api/message/send";
+
+    const response = await fetch(url, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(message),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    });
+
+    if (!response.ok) {
+      const error: CustomError = new Error(
+        "Something went wrong during sending your message. Try again later..."
+      ) as CustomError;
+      error.code = response.status;
+      error.info = await response.json();
+      throw error;
     }
-  );
 
-  if (!res.ok) {
-    const err = new Error(
-      "Something went wrong during sending you message. Try again later..."
-    ) as CustomError;
-    err.code = res.status;
-    err.info = await res.json();
-    throw err;
+    return true;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    throw error;
   }
-
-  return true;
 }

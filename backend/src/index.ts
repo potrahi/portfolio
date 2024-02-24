@@ -12,7 +12,7 @@ app.get("/api/hello", (req: Request, res: Response) => {
   res.json({ message: "Hello from Express!" });
 });
 
-app.post("/message/send", (req: Request, res: Response) => {
+app.post("/api/message/send", (req: Request, res: Response) => {
   console.log(req.body);
   res.status(200).send({ message: "Message received successfully!" });
 });

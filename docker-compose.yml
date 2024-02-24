@@ -1,20 +1,20 @@
 version: "3.8"
+
 services:
   frontend:
     build:
-      context: frontend
+      context: ./frontend
       dockerfile: Dockerfile
-      args:
-        VITE_REACT_APP_BACKEND_URL: "193.165.29.194:3001"
     restart: unless-stopped
     ports:
       - "80:80"
+    depends_on:
+      - backend
+
   backend:
     build:
-      context: backend
+      context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "3001:3001"
-    environment:
-      - NODE_ENV=production
