@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  auth_db:
+    image: arm32v7/mongo
+
+  message_db:
+    image: arm32v7/mongo
