@@ -1,8 +1,8 @@
-version: '3.8'
+version: "3.8"
 
 services:
   auth_db:
-    image: arm32v7/mongo
+    image: mongodb-raspberrypi4-unofficial-r7.0.4
 
   message_db:
-    image: arm32v7/mongo
+    image: mongodb-raspberrypi4-unofficial-r7.0.4
