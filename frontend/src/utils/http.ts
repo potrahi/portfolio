@@ -3,15 +3,13 @@ import { MessageType } from "../types/data";
 import { CustomError } from "../types/error";
 
 export const queryClient = new QueryClient();
+const baseUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 export async function sendMessage(
   message: MessageType
 ): Promise<boolean | CustomError> {
   try {
-    const baseUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-    const url = baseUrl
-      ? `http://${baseUrl}/api/message/send`
-      : "/api/message/send";
+    const url = baseUrl ? `http://${baseUrl}/message/send` : "/message/send";
 
     const response = await fetch(url, {
       method: "POST",

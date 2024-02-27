@@ -5,14 +5,45 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    restart: unless-stopped
 
-  backend:
+  auth:
     build:
-      context: ./backend
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth_db
+    environment:
+      MONGO_URL: mongodb://auth_db:27017
+      JWT_SECRET: supersecret
+
+  auth_db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - auth_data:/data/db
+
+  message_db:
+    container_name: message_db
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    volumes:
+      - message_data:/data/db
+
+  message:
+    build:
+      context: ./message
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
+    depends_on:
+      - message_db
+    environment:
+      MONGO_URL: mongodb://message_db:27017
+      NODE_ENV: production
     restart: unless-stopped
 
   nginx:
@@ -24,4 +55,9 @@ services:
       - ./frontend/dist:/usr/share/nginx/html:ro
     depends_on:
       - frontend
-      - backend
+      - message
+      - auth
+
+volumes:
+  auth_data:
+  message_data:
