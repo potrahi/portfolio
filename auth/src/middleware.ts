@@ -11,7 +11,7 @@ export const restrictAccessByIP = (
   const allowedIPs = [
     "localhost",
     "::ffff:192.168.0.100",
-    "192.168.65.1",
+    "::ffff:192.168.65.1",
     "::1",
     "::ffff:172.20.0.1",
   ];
