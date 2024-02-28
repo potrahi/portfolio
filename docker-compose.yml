@@ -6,8 +6,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+    volumes:
+      - frontend:/app/dist
 
   auth:
     container_name: auth
@@ -56,14 +56,16 @@ services:
     container_name: nginx
     image: nginx:alpine
     ports:
-      - "8080:8080"
+      - "80:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
+      - frontend:/usr/share/nginx/html
     depends_on:
       - frontend
       - message
       - auth
 
 volumes:
+  frontend:
   auth_data:
   message_data:
