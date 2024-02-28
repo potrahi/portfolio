@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -9,6 +10,7 @@ services:
       - "80:80"
 
   auth:
+    container_name: auth
     build:
       context: ./auth
       dockerfile: Dockerfile
@@ -21,21 +23,15 @@ services:
       JWT_SECRET: supersecret
 
   auth_db:
+    container_name: auth_db
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
       - auth_data:/data/db
 
-  message_db:
-    container_name: message_db
-    image: mongo:latest
-    ports:
-      - "27018:27017"
-    volumes:
-      - message_data:/data/db
-
   message:
+    container_name: message
     build:
       context: ./message
       dockerfile: Dockerfile
@@ -48,7 +44,16 @@ services:
       NODE_ENV: production
     restart: unless-stopped
 
+  message_db:
+    container_name: message_db
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    volumes:
+      - message_data:/data/db
+
   nginx:
+    container_name: nginx
     image: nginx:alpine
     ports:
       - "8080:8080"
