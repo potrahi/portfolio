@@ -33,7 +33,7 @@ export const authenticate = async (
     if (data.valid) {
       next();
     } else {
-      res.status(401).send("[ERROR] Unauthorized");
+      res.status(401).send("Unauthorized");
     }
   } catch (err) {
     if (err instanceof Error) {
