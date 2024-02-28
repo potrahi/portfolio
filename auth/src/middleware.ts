@@ -8,7 +8,13 @@ export const restrictAccessByIP = (
   res: Response,
   next: NextFunction
 ) => {
-  const allowedIPs = ["localhost", "192.168.0.100", "192.168.65.1", "::1"];
+  const allowedIPs = [
+    "localhost",
+    "::ffff:192.168.0.100",
+    "192.168.65.1",
+    "::1",
+    "::ffff:172.20.0.1",
+  ];
   const requestIP = req.ip || req.socket.remoteAddress || "";
   console.log("[INFO]", "requestIP", requestIP);
   if (allowedIPs.includes(requestIP)) {
