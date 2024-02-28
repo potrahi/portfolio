@@ -12,34 +12,35 @@ export const authenticate = async (
 ): Promise<void> => {
   const token = req.headers.authorization;
 
-  const url =
+  const baseUrl =
     process.env.NODE_ENV === "production"
-      ? "http://auth:3000/auth/verify"
-      : "http://localhost:3000/auth/verify";
-  console.log(url);
+      ? "http://auth:3000"
+      : "http://localhost:3000";
+  const verifyUrl = `${baseUrl}/auth/verify`;
+
   try {
-    const response = await axios.post(
-      url,
-      { token },
+    const { data } = await axios.post<ResponseType>(
+      verifyUrl,
+      {},
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: token,
         },
       }
     );
-    const data = response.data as ResponseType;
+
     if (data.valid) {
       next();
     } else {
-      res.status(401).send("Unauthorized");
+      res.status(401).send("[ERROR] Unauthorized");
     }
   } catch (err) {
     if (err instanceof Error) {
-      console.error(err.message);
-      res.status(500).send("Internal server error");
+      console.error("[ERROR] Authentication error:", err.message);
     } else {
-      console.error("An unexpected error occurred");
-      res.status(500).send("Internal server error");
+      console.error("[ERROR] An unexpected error occurred", err);
     }
+    res.status(500).send("Internal server error");
   }
 };

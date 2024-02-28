@@ -1,29 +1,38 @@
-import { sign, verify } from "jsonwebtoken";
-import { compare } from "bcryptjs";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+const { sign, verify } = jwt;
+const { compare } = bcrypt;
 
-export function createJSONToken(email: string) {
-  return sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+const JWT_SECRET: string = process.env.JWT_SECRET || "supersecret";
+
+type TokenPayload = {
+  email: string;
+};
+
+function generateToken(email: string) {
+  return sign({ email } as TokenPayload, JWT_SECRET, { expiresIn: "1h" });
 }
 
-export function verifyJSONToken(token: string) {
+function verifyToken(token: string): string | jwt.JwtPayload | null {
   try {
-    const decoded = verify(token, JWT_SECRET);
-    return decoded;
+    return verify(token, JWT_SECRET) as string | jwt.JwtPayload;
   } catch (err) {
-    console.error("Unauthorized", err);
+    console.error("Authentication failed", err);
     return null;
   }
 }
 
-export async function isValidPassword(
+async function comparePasswords(
   password: string,
-  storedPassword: string = ""
-) {
+  storedPassword: string
+): Promise<boolean> {
   return compare(password, storedPassword);
 }
 
-export function isValidEmail(value: string) {
-  return /\S+@\S+\.\S+/.test(value);
+function validateEmail(value: string): boolean {
+  const emailRegex: RegExp = /\S+@\S+\.\S+/;
+  return emailRegex.test(value);
 }
+
+export { generateToken, verifyToken, comparePasswords, validateEmail };

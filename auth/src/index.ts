@@ -1,18 +1,19 @@
-import express, { Request, Response } from "express";
-import bodyParser from "body-parser";
+import express from "express";
 import cors from "cors";
-import { authenticate, login, signup } from "./middleware";
+import { authenticate, login, restrictAccessByIP, signup } from "./middleware";
 
 const app = express();
-const PORT: number = parseInt(process.env.PORT as string, 10) || 3000;
+const PORT: number = process.env.PORT
+  ? parseInt(process.env.PORT as string, 10)
+  : 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.post("/auth/signup", signup);
+app.post("/auth/signup", restrictAccessByIP, signup);
 app.post("/auth/login", login);
 app.post("/auth/verify", authenticate);
 
 app.listen(PORT, () => {
-  console.log(`Auth server running on port ${PORT}`);
+  console.log(`Auth server running on port: ${PORT}`);
 });
