@@ -21,6 +21,7 @@ services:
     environment:
       MONGO_URL: mongodb://auth_db:27017
       JWT_SECRET: supersecret
+    restart: unless-stopped
 
   auth_db:
     container_name: auth_db
@@ -29,6 +30,7 @@ services:
       - "27017:27017"
     volumes:
       - auth_data:/data/db
+    restart: unless-stopped
 
   message:
     container_name: message
@@ -51,6 +53,7 @@ services:
       - "27018:27017"
     volumes:
       - message_data:/data/db
+    restart: unless-stopped
 
   nginx:
     container_name: nginx
@@ -64,6 +67,7 @@ services:
       - frontend
       - message
       - auth
+    restart: unless-stopped
 
 volumes:
   frontend:

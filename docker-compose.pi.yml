@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   auth_db:
-    image: mongodb-raspberrypi4-unofficial-r7.0.4
+    image: mongodb-raspberrypi4-unofficial-r7.0.5
 
   message_db:
-    image: mongodb-raspberrypi4-unofficial-r7.0.4
+    image: mongodb-raspberrypi4-unofficial-r7.0.5
