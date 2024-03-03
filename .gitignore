@@ -27,3 +27,5 @@ mongodb/
 .env
 
 _*.sh
+
+certs/

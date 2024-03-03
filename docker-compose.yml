@@ -20,7 +20,7 @@ services:
       - auth_db
     environment:
       MONGO_URL: mongodb://auth_db:27017
-      JWT_SECRET: supersecret
+      JWT_SECRET: ${JWT_SECRET:-defaultuser}
     restart: unless-stopped
 
   auth_db:
@@ -43,7 +43,7 @@ services:
       - message_db
     environment:
       MONGO_URL: mongodb://message_db:27017
-      JWT_SECRET: supersecret
+      JWT_SECRET: ${JWT_SECRET:-defaultuser}
     restart: unless-stopped
 
   message_db:
@@ -60,8 +60,10 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
       - frontend:/usr/share/nginx/html
     depends_on:
       - frontend
