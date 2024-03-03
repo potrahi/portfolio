@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { authenticate, login, restrictAccessByIP, signup } from "./middleware";
+import { restrictAccessByIP } from "./middleware";
+import { login, signup } from "./routes";
 
 const app = express();
 const PORT: number = process.env.PORT
@@ -10,9 +11,8 @@ const PORT: number = process.env.PORT
 app.use(cors());
 app.use(express.json());
 
-app.post("/auth/signup", restrictAccessByIP, signup);
-app.post("/auth/login", login);
-app.post("/auth/verify", authenticate);
+app.post("/signup", restrictAccessByIP, signup);
+app.post("/login", login);
 
 app.listen(PORT, () => {
   console.log(`Auth server running on port: ${PORT}`);

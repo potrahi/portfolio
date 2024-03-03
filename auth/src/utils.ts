@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-const { sign, verify } = jwt;
+const { sign } = jwt;
 const { compare } = bcrypt;
 
 const JWT_SECRET: string = process.env.JWT_SECRET || "supersecret";
@@ -11,16 +11,7 @@ type TokenPayload = {
 };
 
 function generateToken(email: string) {
-  return sign({ email } as TokenPayload, JWT_SECRET, { expiresIn: "1h" });
-}
-
-function verifyToken(token: string): string | jwt.JwtPayload | null {
-  try {
-    return verify(token, JWT_SECRET) as string | jwt.JwtPayload;
-  } catch (err) {
-    console.error("Authentication failed", err);
-    return null;
-  }
+  return sign({ email } as TokenPayload, JWT_SECRET, { expiresIn: "15m" });
 }
 
 async function comparePasswords(
@@ -35,4 +26,4 @@ function validateEmail(value: string): boolean {
   return emailRegex.test(value);
 }
 
-export { generateToken, verifyToken, comparePasswords, validateEmail };
+export { generateToken, comparePasswords, validateEmail };

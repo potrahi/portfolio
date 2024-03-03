@@ -1,46 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import axios from "axios";
+import jwt from "jsonwebtoken";
 
-type ResponseType = {
-  valid?: boolean;
-};
+const { verify } = jwt;
 
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const token = req.headers.authorization;
+const JWT_SECRET: string = process.env.JWT_SECRET || "supersecret";
 
-  const baseUrl =
-    process.env.NODE_ENV === "production"
-      ? "http://auth:3000"
-      : "http://localhost:3000";
-  const verifyUrl = `${baseUrl}/auth/verify`;
-
+export const verifyToken = (token: string): string | jwt.JwtPayload | null => {
   try {
-    const { data } = await axios.post<ResponseType>(
-      verifyUrl,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-
-    if (data.valid) {
-      next();
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    return verify(token, JWT_SECRET) as string | jwt.JwtPayload;
   } catch (err) {
-    if (err instanceof Error) {
-      console.error("[ERROR] Authentication error:", err.message);
-    } else {
-      console.error("[ERROR] An unexpected error occurred", err);
-    }
-    res.status(500).send("Internal server error");
+    console.error("[ERROR]", "Authentication failed", err);
+    return null;
   }
 };
