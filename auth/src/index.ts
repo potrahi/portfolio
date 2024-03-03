@@ -11,8 +11,8 @@ const PORT: number = process.env.PORT
 app.use(cors());
 app.use(express.json());
 
-app.post("/signup", restrictAccessByIP, signup);
-app.post("/login", login);
+app.post("/auth/signup", restrictAccessByIP, signup);
+app.post("/auth/login", login);
 
 app.listen(PORT, () => {
   console.log(`Auth server running on port: ${PORT}`);

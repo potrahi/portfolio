@@ -9,8 +9,8 @@ const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", authenticate, listMessages);
-app.post("/send", createMessage);
+app.get("/message/", authenticate, listMessages);
+app.post("/message/send", createMessage);
 
 app.listen(PORT, () => {
   console.log(`Message server is running on port: ${PORT}`);
