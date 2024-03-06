@@ -1,0 +1,44 @@
+CREATE TABLE Component (
+    ID UUID NOT NULL,
+    "Name" VARCHAR(20) NOT NULL,
+    "Order" INTEGER,
+    Styles TEXT,
+    Content TEXT,
+    DateCreated TIMESTAMPTZ,
+    DateModified TIMESTAMPTZ,
+    Post_ID UUID NOT NULL,
+    ComponentType_ID INTEGER NOT NULL
+);
+
+ALTER TABLE Component
+ADD CONSTRAINT Component_PK PRIMARY KEY (ID, Post_ID);
+
+CREATE TABLE ComponentType (
+    ID INTEGER NOT NULL,
+    "Name" VARCHAR(20) NOT NULL
+);
+
+ALTER TABLE ComponentType
+ADD CONSTRAINT ComponentType_PK PRIMARY KEY (ID);
+
+CREATE TABLE Post (
+    ID UUID NOT NULL,
+    UserID VARCHAR(30) NOT NULL,
+    "Name" VARCHAR(20) NOT NULL,
+    "Type" VARCHAR(20),
+    "Description" TEXT,
+    DateCreated TIMESTAMPTZ,
+    DateModified TIMESTAMPTZ
+);
+
+ALTER TABLE Post
+ADD CONSTRAINT Post_PK PRIMARY KEY (ID);
+
+ALTER TABLE Component
+ADD CONSTRAINT Component_ComponentType_FK FOREIGN KEY (ComponentType_ID) REFERENCES ComponentType (ID) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE Component
+ADD CONSTRAINT Component_Post_FK FOREIGN KEY (Post_ID) REFERENCES Post (ID) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+CREATE INDEX ON Component(Post_ID);
+CREATE INDEX ON Component(ComponentType_ID);

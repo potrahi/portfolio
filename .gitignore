@@ -29,3 +29,8 @@ mongodb/
 _*.sh
 
 certs/
+db/
+
+**/*.localz
+**/*.local
+**/*.git

@@ -7,11 +7,12 @@ const { compare } = bcrypt;
 const JWT_SECRET: string = process.env.JWT_SECRET || "supersecret";
 
 type TokenPayload = {
+  id: string;
   email: string;
 };
 
-function generateToken(email: string) {
-  return sign({ email } as TokenPayload, JWT_SECRET, { expiresIn: "15m" });
+function generateToken(id: string, email: string) {
+  return sign({ id, email } as TokenPayload, JWT_SECRET, { expiresIn: "15m" });
 }
 
 async function comparePasswords(

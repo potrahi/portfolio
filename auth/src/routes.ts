@@ -3,7 +3,6 @@ import { hash } from "bcryptjs";
 import { addUser, getUser } from "./db";
 import { generateToken, comparePasswords } from "./utils";
 
-
 export const signup = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -31,7 +30,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).send("[ERROR] Unauthorized");
     }
 
-    const token = generateToken(email);
+    const token = generateToken(user._id.toString(), email);
     res.status(200).json({ token, message: "Login successful" });
   } catch (err) {
     console.log("[ERROR] Login error:", err);

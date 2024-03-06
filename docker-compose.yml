@@ -20,7 +20,8 @@ services:
       - auth_db
     environment:
       MONGO_URL: mongodb://auth_db:27017
-      JWT_SECRET: ${JWT_SECRET:-defaultuser}
+      ALLOWED_IP: ${ALLOWED_IP}
+      JWT_SECRET: ${JWT_SECRET}
     restart: unless-stopped
 
   auth_db:
@@ -32,18 +33,49 @@ services:
       - auth_data:/data/db
     restart: unless-stopped
 
+  blog:
+    container_name: blog
+    build:
+      context: ./blog
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - blog_db
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      DB_HOST: blog_db
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+    restart: unless-stopped
+
+  blog_db:
+    container_name: blog_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./blog/init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+
   message:
     container_name: message
     build:
       context: ./message
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "3002:3002"
     depends_on:
       - message_db
     environment:
       MONGO_URL: mongodb://message_db:27017
-      JWT_SECRET: ${JWT_SECRET:-defaultuser}
+      JWT_SECRET: ${JWT_SECRET}
     restart: unless-stopped
 
   message_db:
