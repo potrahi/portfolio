@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpError } from "./classes";
 
+// Centralized Error Handling Middleware
 export const ErrorHandling = (
   err: HttpError | Error,
   req: Request,

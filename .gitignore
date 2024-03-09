@@ -29,7 +29,9 @@ mongodb/
 _*.sh
 
 certs/
-db/
+blogdb/
+blog.*
+blogdb.*
 
 **/*.localz
 **/*.local
