@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { randomUUID } from "crypto";
 import { HttpError } from "./classes";
 import { PostData } from "./types";
-import { asyncHandler } from "./wrapper";
+import { asyncHandler, withTryCatch } from "./wrapper";
 import { authenticate } from "./auth/middleware";
 import { query } from "./db/pool";
 import {
@@ -47,7 +47,7 @@ router.get(
 
 router.post(
   "/create",
-  authenticate,
+  withTryCatch(authenticate),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, type, description } = req.body as PostData;
 
@@ -81,11 +81,12 @@ router.post(
 
 router.put(
   "/:id/update",
-  authenticate,
+  withTryCatch(authenticate),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, type, description } = req.body as PostData;
     const { id } = req.params;
     validateId(id);
+    validateId(req.user?.id);
 
     const currentData = await query(selectById, [id]);
     if (currentData.rowCount === 0) {
@@ -105,6 +106,7 @@ router.put(
       type,
       description,
       id,
+      req.user?.id,
     ]);
 
     if (!updatedData) {
@@ -120,12 +122,12 @@ router.put(
 
 router.delete(
   "/:id/delete",
-  authenticate,
+  withTryCatch(authenticate),
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     validateId(id);
-
-    await query(deleteRecordById, [id]);
+    validateId(req.user?.id);
+    await query(deleteRecordById, [id, req.user?.id]);
     res.status(204).send();
   })
 );

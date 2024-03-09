@@ -5,7 +5,8 @@ export const restrictAccessByIP = (
   res: Response,
   next: NextFunction
 ) => {
-  const allowedIPs = process.env.ALLOWED_IP?.split(',');
+  const allowedIPs = process.env.ALLOWED_IP?.split(",");
+
   const requestIP = req.ip || req.socket.remoteAddress || "";
   console.log("[INFO]", "requestIP", requestIP);
   if (allowedIPs?.includes(requestIP)) {
